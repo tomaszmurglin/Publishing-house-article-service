@@ -2,9 +2,11 @@ package com.murglin.consulting.publishinghousereviewservice.service;
 
 import com.murglin.consulting.publishinghousereviewservice.exception.NotFoundException;
 import com.murglin.consulting.publishinghousereviewservice.exception.UnauthorizedException;
-import com.murglin.consulting.publishinghousereviewservice.model.article.*;
+import com.murglin.consulting.publishinghousereviewservice.model.article.Article;
+import com.murglin.consulting.publishinghousereviewservice.model.article.Content;
+import com.murglin.consulting.publishinghousereviewservice.model.article.Title;
+import com.murglin.consulting.publishinghousereviewservice.model.article.Topic;
 import com.murglin.consulting.publishinghousereviewservice.model.review.Review;
-import com.murglin.consulting.publishinghousereviewservice.model.review.ReviewStatus;
 import com.murglin.consulting.publishinghousereviewservice.model.review.SuggestedChanges;
 import com.murglin.consulting.publishinghousereviewservice.repository.ArticleRepository;
 import com.murglin.consulting.publishinghousereviewservice.repository.TopicRepository;
@@ -26,15 +28,14 @@ public class ArticleService {
     private final TopicRepository topicRepository;
 
     public Article submitForPublishing(String articleName, String articleContent, Set<Topic> topics, Set<UUID> copyWriters,
-                                       UUID publisherId) {
+                                       UUID authorId) {
         //TODO validation of input data in layer above before (eg. json schema) or after deserialization (eg. jackson)
-
-        var publisher = userRepository.findById(publisherId).orElseThrow(() -> new NotFoundException("User has not been found"));
-        if (publisher.isJournalist()) { //TODO authorization could be moved into controllers layer of the app
+        var author = userRepository.findById(authorId).orElseThrow(() -> new NotFoundException("User has not been found"));
+        if (author.isJournalist()) { //TODO authorization could be moved into controllers layer of the app
             throw new UnauthorizedException("Only Journalist can submit article for publishing");
         }
         if (!topicRepository.allExists(topics)) {
-            throw new NotFoundException("Some of provided topics have not exist");
+            throw new NotFoundException("Some of provided topics have not been found");
         }
         userRepository.findByIdIn(copyWriters).forEach(copyWriter -> {
             var user = copyWriter.orElseThrow(() -> new NotFoundException("User has not been found"));
@@ -42,16 +43,26 @@ public class ArticleService {
                 throw new IllegalArgumentException("Only copywriters could be assigned to review article");
             }
         });
-        var title = new Title(articleName);
-        var content = new Content(articleContent);
-        var articleId = UUID.randomUUID();
-        var review = new Review(UUID.randomUUID(), articleId, ReviewStatus.IN_PROGRESS, copyWriters);
-        var newArticle = new Article(articleId, ArticleStatus.DRAFT, title, content, topics, review, publisher);
+        var title = Title.create(articleName);
+        var content = Content.create(articleContent);
+        var review = Review.create(copyWriters);
+        var newArticle = Article.create(title, content, topics, review, author);
         return articleRepository.save(newArticle);
     }
 
-    public suggestRemarks(SuggestedChanges suggestedChanges, UUID articleId) {
-
+    public Article suggestChanges(UUID copyWriterId, String remarks, UUID articleId) {
+        //TODO validation of input data in layer above before (eg. json schema) or after deserialization (eg. jackson)
+        var copyWriter = userRepository.findById(copyWriterId).orElseThrow(() -> new NotFoundException("User has not been found"));
+        if (copyWriter.isCopyWriter()) { //TODO authorization could be moved into controllers layer of the app
+            throw new UnauthorizedException("Only Copywriter can suggest changes to an article");
+        }
+        var suggestChanges = SuggestedChanges.create(copyWriterId, remarks);
+        var article = articleRepository.findById(articleId).orElseThrow(() -> new NotFoundException("Article has not been found"));
+        article.suggestChanges(suggestChanges);
+        return articleRepository.save(article);
     }
 
+    public Article publish() {
+
+    }
 }

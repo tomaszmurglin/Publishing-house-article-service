@@ -1,30 +1,51 @@
 package com.murglin.consulting.publishinghousereviewservice.model.article;
 
 import com.murglin.consulting.publishinghousereviewservice.model.review.Review;
+import com.murglin.consulting.publishinghousereviewservice.model.review.SuggestedChanges;
 import com.murglin.consulting.publishinghousereviewservice.model.user.User;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.Set;
 import java.util.UUID;
 
-@RequiredArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Setter
 public class Article {
 
-    private final UUID id;
+    private final UUID id = UUID.randomUUID();
 
-    private final ArticleStatus status;
+    private ArticleStatus status;
 
-    private final Title title;
+    private Title title;
 
-    private final Content content;
+    private Content content;
 
-    private final Set<Topic> topics;
+    private Set<Topic> topics;
 
-    private final Review review;
+    private Review review;
 
-    private final User author;
+    private User author;
+
+    public void suggestChanges(SuggestedChanges suggestedChanges) {
+        if (author.getId().equals(suggestedChanges.getCopyWriterId())) {
+            throw new IllegalStateException("Author cannot suggest remarks to its own article"); //TODO question - can or not ?
+        }
+        if (status == ArticleStatus.PUBLISHED) {
+            throw new IllegalStateException("Cannot suggest changes to already published article");
+        }
+        status = ArticleStatus.IN_REVIEW;
+        review.suggestChanges(suggestedChanges);
+        //TODO generate event to publish here
+    }
+
+    public static Article create(Title title, Content content, Set<Topic> topics, Review review, User author) {
+        if (topics.isEmpty()) {
+            throw new IllegalArgumentException("Cannot create article without topic");
+        }
+        return new Article(ArticleStatus.DRAFT, title, content, topics, review, author);
+    }
 }
