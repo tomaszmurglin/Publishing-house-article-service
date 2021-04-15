@@ -42,6 +42,18 @@ public class Article {
         //TODO generate event to publish here
     }
 
+    public void publish(User publisher) {
+        if (!author.equals(publisher)) { //TODO only author or any journalist can publish article ?
+            throw new IllegalArgumentException("Only author can publish the article");
+        }
+        if (status != ArticleStatus.IN_REVIEW) {
+            throw new IllegalStateException("Only reviewed article can be published"); //TODO can publish draft without review ?
+        }
+        status = ArticleStatus.PUBLISHED;
+        review.complete();
+        //TODO generate event to publish here
+    }
+
     public static Article create(Title title, Content content, Set<Topic> topics, Review review, User author) {
         if (topics.isEmpty()) {
             throw new IllegalArgumentException("Cannot create article without topic");

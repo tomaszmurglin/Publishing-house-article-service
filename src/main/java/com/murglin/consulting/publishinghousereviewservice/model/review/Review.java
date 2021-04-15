@@ -14,7 +14,7 @@ public class Review {
 
     private final UUID id = UUID.randomUUID();
 
-    private final ReviewStatus status = ReviewStatus.IN_PROGRESS;
+    private ReviewStatus status = ReviewStatus.IN_PROGRESS;
 
     private final Set<SuggestedChanges> suggestedChanges = new HashSet<>();
 
@@ -30,10 +30,25 @@ public class Review {
         this.suggestedChanges.add(suggestedChanges);
     }
 
+    public void complete() {
+        if (status == ReviewStatus.COMPLETED) {
+            throw new IllegalStateException("Cannot complete already completed review");
+        }
+        if (!areAllRemarksResolved()) {
+            throw new IllegalStateException("Cannot complete review with not resolved remarks");
+        }
+        status = ReviewStatus.COMPLETED;
+        //TODO generate event to publish here
+    }
+
     public static Review create(Set<UUID> reviewersIds) {
         if (reviewersIds.isEmpty()) {
             throw new IllegalArgumentException("Review must have reviewers"); //TODO or reviewers can be assigned later on ?
         }
         return new Review(reviewersIds);
+    }
+
+    private boolean areAllRemarksResolved() {
+        return suggestedChanges.stream().allMatch(SuggestedChanges::isResolved);
     }
 }

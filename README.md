@@ -7,5 +7,4 @@ There is a publishing house, which publishes the "Layer Weekly" magazine. The ma
 Implemented User Stories
 As a journalist, I submit a draft article for publishing to a given topic
 As a copywriter, I suggest changes to the draft article I'm assigned to
-
 As a journalist, I can publish the article after all suggestions are resolved
