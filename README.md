@@ -1,4 +1,4 @@
-# publishing-house-review-service
+# Publishing-house-review-service
 DDD business model example:
 
 Background
