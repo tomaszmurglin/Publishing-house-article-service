@@ -8,3 +8,9 @@ Implemented User Stories:
 * As a journalist, I submit a draft article for publishing to a given topic
 * As a copywriter, I suggest changes to the draft article I'm assigned to
 * As a journalist, I can publish the article after all suggestions are resolved
+
+# Important:
+It's an DDD example, so focus of this project is the 'model' package.
+The application have layered architecture.
+Controllers layer is not implemented.
+Data access layer is stubbed with simple hashmap.
