@@ -14,3 +14,8 @@ It's an DDD example, so focus of this project is the 'model' package.
 The application have layered architecture.
 Controllers layer is not implemented.
 Data access layer is stubbed with simple hashmap.
+
+# Tech stack:
+* Java 11, Groovy
+* Spring boot
+* Spock tests
