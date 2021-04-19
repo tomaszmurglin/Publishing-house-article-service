@@ -13,10 +13,12 @@ public class User {
 
     private final UserRole role;
 
+    //TODO test it
     public boolean isJournalist() {
         return role == UserRole.JOURNALIST;
     }
 
+    //TODO test it
     public boolean isCopyWriter() {
         return role == UserRole.COPYWRITER;
     }

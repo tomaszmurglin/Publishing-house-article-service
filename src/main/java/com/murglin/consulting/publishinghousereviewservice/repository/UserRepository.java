@@ -15,11 +15,13 @@ public class UserRepository {
 
     private final Map<UUID, User> inMemoryDb = new ConcurrentHashMap<>();
 
-    public Optional<User> findById(UUID id) {
+    //TODO test it
+    public Optional<User> findById(final UUID id) {
         return Optional.ofNullable(inMemoryDb.get(id));
     }
 
-    public Set<Optional<User>> findByIdIn(Set<UUID> ids) {
+    //TODO test it
+    public Set<Optional<User>> findByIdIn(final Set<UUID> ids) {
         return ids.stream()
                 .map(id -> Optional.ofNullable(inMemoryDb.get(id)))
                 .collect(Collectors.toUnmodifiableSet());

@@ -10,8 +10,9 @@ public class Content {
 
     private final String content;
 
-    public static Content create(String content) {
-        if (!content.isBlank()) {
+    //TODO test it
+    public static Content create(final String content) {
+        if (content.isBlank()) {
             throw new IllegalArgumentException("Content cannot be blank");
         }
         return new Content(content);

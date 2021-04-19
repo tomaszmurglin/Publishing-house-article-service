@@ -18,7 +18,8 @@ public class SuggestedChanges {
 
     private final boolean resolved = false;
 
-    public static SuggestedChanges create(UUID copyWriterId, String remarks) {
+    //TODO test it
+    public static SuggestedChanges create(final UUID copyWriterId, final String remarks) {
         if (remarks.isBlank()) {
             throw new IllegalStateException("Suggested changes should have meaningful remarks");
         }

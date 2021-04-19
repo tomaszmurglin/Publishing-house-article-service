@@ -13,7 +13,8 @@ public class TopicRepository {
 
     private final Map<UUID, Topic> inMemoryDb = new ConcurrentHashMap<>();
 
-    public boolean allExists(Set<Topic> topics) {
+    //TODO test it
+    public boolean allExists(final Set<Topic> topics) {
         return topics
                 .stream()
                 .allMatch(topic -> inMemoryDb.containsKey(topic.getId()));

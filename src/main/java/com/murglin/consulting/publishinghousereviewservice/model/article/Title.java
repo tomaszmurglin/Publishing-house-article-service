@@ -10,7 +10,8 @@ public class Title {
 
     private final String name;
 
-    public static Title create(String name) {
+    //TODO test it
+    public static Title create(final String name) {
         if (name.isBlank()) {
             throw new IllegalArgumentException("Title name cannot be blank");
         }

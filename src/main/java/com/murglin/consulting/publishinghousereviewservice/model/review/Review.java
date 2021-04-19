@@ -20,7 +20,8 @@ public class Review {
 
     private final Set<UUID> reviewersIds;
 
-    public void suggestChanges(SuggestedChanges suggestedChanges) {
+    //TODO test it
+    public void suggestChanges(final SuggestedChanges suggestedChanges) {
         if (status == ReviewStatus.COMPLETED) {
             throw new IllegalStateException("Completed review cant be modified");
         }
@@ -30,6 +31,7 @@ public class Review {
         this.suggestedChanges.add(suggestedChanges);
     }
 
+    //TODO test it
     public void complete() {
         if (status == ReviewStatus.COMPLETED) {
             throw new IllegalStateException("Cannot complete already completed review");
@@ -41,7 +43,8 @@ public class Review {
         //TODO generate event to publish here
     }
 
-    public static Review create(Set<UUID> reviewersIds) {
+    //TODO test it
+    public static Review create(final Set<UUID> reviewersIds) {
         if (reviewersIds.isEmpty()) {
             throw new IllegalArgumentException("Review must have reviewers"); //TODO or reviewers can be assigned later on ?
         }

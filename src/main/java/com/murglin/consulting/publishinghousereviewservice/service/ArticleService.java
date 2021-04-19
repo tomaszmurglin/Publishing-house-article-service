@@ -27,14 +27,15 @@ public class ArticleService {
 
     private final TopicRepository topicRepository;
 
-    public Article submitForPublishing(String articleName, String articleContent, Set<Topic> topics, Set<UUID> copyWriters,
-                                       UUID userId) {
+    //TODO test it
+    public Article submitForPublishing(final String articleName, final String articleContent, final Topic topic,
+                                       final Set<UUID> copyWriters, final UUID userId) {
         //TODO validation of input data in layer above before (eg. json schema) or after deserialization (eg. jackson)
         var author = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User has not been found"));
         if (author.isJournalist()) { //TODO authorization could be moved into controllers layer of the app
             throw new UnauthorizedException("Only Journalist can submit article for publishing");
         }
-        if (!topicRepository.allExists(topics)) {
+        if (!topicRepository.allExists(Set.of(topic))) {
             throw new NotFoundException("Some of provided topics have not been found");
         }
         userRepository.findByIdIn(copyWriters).forEach(copyWriter -> {
@@ -46,11 +47,12 @@ public class ArticleService {
         var title = Title.create(articleName);
         var content = Content.create(articleContent);
         var review = Review.create(copyWriters);
-        var newArticle = Article.create(title, content, topics, review, author);
+        var newArticle = Article.create(title, content, topic, review, author);
         return articleRepository.save(newArticle);
     }
 
-    public Article suggestChanges(UUID userId, String remarks, UUID articleId) {
+    //TODO test it
+    public Article suggestChanges(final UUID userId, final String remarks, final UUID articleId) {
         //TODO validation of input data in layer above before (eg. json schema) or after deserialization (eg. jackson)
         var copyWriter = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User has not been found"));
         if (copyWriter.isCopyWriter()) { //TODO authorization could be moved into controllers layer of the app
@@ -62,7 +64,8 @@ public class ArticleService {
         return articleRepository.save(article);
     }
 
-    public Article publish(UUID userId, UUID articleId) {
+    //TODO test it
+    public Article publish(final UUID userId, final UUID articleId) {
         //TODO check if user the the author
         var article = articleRepository.findById(articleId).orElseThrow(() -> new NotFoundException("Article has not been found"));
         var user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User has not been found"));
