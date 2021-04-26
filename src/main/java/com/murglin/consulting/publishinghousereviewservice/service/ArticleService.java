@@ -13,6 +13,7 @@ import com.murglin.consulting.publishinghousereviewservice.repository.TopicRepos
 import com.murglin.consulting.publishinghousereviewservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.UUID;
@@ -28,6 +29,7 @@ public class ArticleService {
     private final TopicRepository topicRepository;
 
     //TODO test it
+    @Transactional //of course it wont work without transactional data store like hashmap - its just an example
     public Article submitForPublishing(final String articleName, final String articleContent, final Topic topic,
                                        final Set<UUID> copyWriters, final UUID userId) {
         //TODO validation of input data in layer above before (eg. json schema) or after deserialization (eg. jackson)
@@ -52,6 +54,7 @@ public class ArticleService {
     }
 
     //TODO test it
+    @Transactional //of course it wont work without transactional data store like hashmap - its just an example
     public Article suggestChanges(final UUID userId, final String remarks, final UUID articleId) {
         //TODO validation of input data in layer above before (eg. json schema) or after deserialization (eg. jackson)
         var copyWriter = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User has not been found"));
@@ -65,6 +68,7 @@ public class ArticleService {
     }
 
     //TODO test it
+    @Transactional //of course it wont work without transactional data store like hashmap - its just an example
     public Article publish(final UUID userId, final UUID articleId) {
         //TODO check if user the the author
         var article = articleRepository.findById(articleId).orElseThrow(() -> new NotFoundException("Article has not been found"));

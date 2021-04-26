@@ -1,12 +1,15 @@
 package com.murglin.consulting.publishinghousereviewservice.model.article;
 
 import lombok.AccessLevel;
-import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Data
+import javax.annotation.concurrent.ThreadSafe;
+
+@Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class Title {
+@ThreadSafe // value objects should be immutable
+public final class Title {
 
     private final String name;
 
