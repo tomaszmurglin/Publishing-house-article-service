@@ -3,11 +3,13 @@ package com.murglin.consulting.publishinghousereviewservice.model.review;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+//TODO add some db constraints if theres no any performance limitation (constraints uses CPU), cause db is the last resort protection
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 public class Review {
@@ -45,7 +47,7 @@ public class Review {
 
     //TODO test it
     public static Review create(final Set<UUID> reviewersIds) {
-        if (reviewersIds.isEmpty()) {
+        if (CollectionUtils.isEmpty(reviewersIds)) {
             throw new IllegalArgumentException("Review must have reviewers"); //TODO or reviewers can be assigned later on ?
         }
         return new Review(reviewersIds);

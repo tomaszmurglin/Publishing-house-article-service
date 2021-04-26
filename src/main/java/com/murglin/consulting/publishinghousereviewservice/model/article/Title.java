@@ -3,6 +3,7 @@ package com.murglin.consulting.publishinghousereviewservice.model.article;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -15,7 +16,7 @@ public final class Title {
 
     //TODO test it
     public static Title create(final String name) {
-        if (name.isBlank()) {
+        if (StringUtils.isBlank(name)) {
             throw new IllegalArgumentException("Title name cannot be blank");
         }
         return new Title(name);

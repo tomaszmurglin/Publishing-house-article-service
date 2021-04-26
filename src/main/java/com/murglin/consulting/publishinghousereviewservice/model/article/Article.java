@@ -7,9 +7,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.UUID;
 
+//TODO add some db constraints if theres no any performance limitation (constraints uses CPU), cause db is the last resort protection
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Setter
@@ -55,6 +57,9 @@ public class Article {
 
     public static Article create(final Title title, final Content content, final Topic topic,
                                  final Review review, final User author) {
+        if (!ObjectUtils.allNotNull(title, content, topic, review, author)) {
+            throw new IllegalArgumentException("All arguments must be non-null");
+        }
         return new Article(ArticleStatus.DRAFT, title, content, topic, review, author);
     }
 }

@@ -3,6 +3,7 @@ package com.murglin.consulting.publishinghousereviewservice.model.article;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -15,7 +16,7 @@ public final class Content {
 
     //TODO test it
     public static Content create(final String content) {
-        if (content.isBlank()) {
+        if (StringUtils.isBlank(content)) {
             throw new IllegalArgumentException("Content cannot be blank");
         }
         return new Content(content);
