@@ -9,7 +9,7 @@ import com.murglin.consulting.publishinghousereviewservice.model.article.Article
 import com.murglin.consulting.publishinghousereviewservice.model.article.Content;
 import com.murglin.consulting.publishinghousereviewservice.model.article.Title;
 import com.murglin.consulting.publishinghousereviewservice.model.review.Review;
-import com.murglin.consulting.publishinghousereviewservice.model.review.SuggestedChanges;
+import com.murglin.consulting.publishinghousereviewservice.model.review.SuggestedChange;
 import com.murglin.consulting.publishinghousereviewservice.repository.ArticleRepository;
 import com.murglin.consulting.publishinghousereviewservice.repository.TopicRepository;
 import com.murglin.consulting.publishinghousereviewservice.repository.UserRepository;
@@ -68,7 +68,7 @@ public class ArticleService {
         if (copyWriter.isCopyWriter()) { //TODO authorization could be moved into controllers layer of the app using e.g Spring security
             throw new UnauthorizedException("Only Copywriter can suggest changes to an article");
         }
-        final var suggestedChanges = SuggestedChanges.create(suggestChangesRequest.getUserId(), suggestChangesRequest.getRemarks());
+        final var suggestedChanges = SuggestedChange.create(suggestChangesRequest.getUserId(), suggestChangesRequest.getRemarks());
         final var article = articleRepository.findById(suggestChangesRequest.getArticleId()).orElseThrow(() -> new NotFoundException("Article has not been found"));
         article.suggestChanges(suggestedChanges);
         articleRepository.save(article);

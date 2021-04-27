@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,19 +19,19 @@ public class Review {
 
     private ReviewStatus status = ReviewStatus.IN_PROGRESS;
 
-    private final Set<SuggestedChanges> suggestedChanges = new HashSet<>();
+    private final SuggestedChanges suggestedChanges = new SuggestedChanges();
 
     private final Set<UUID> reviewersIds;
 
     //TODO test it
-    public void suggestChanges(final SuggestedChanges suggestedChanges) {
+    public void suggestChanges(final SuggestedChange suggestedChange) {
         if (status == ReviewStatus.COMPLETED) {
             throw new IllegalStateException("Completed review cant be modified");
         }
-        if (!reviewersIds.contains(suggestedChanges.getCopyWriterId())) { //TODO question should we assigned not - assigned already reviewer instead ?
+        if (!reviewersIds.contains(suggestedChange.getCopyWriterId())) { //TODO question should we assigned not - assigned already reviewer instead ?
             throw new IllegalStateException("Reviewer not assigned to the review");
         }
-        this.suggestedChanges.add(suggestedChanges);
+        this.suggestedChanges.suggest(suggestedChange);
         checkInvariants();
     }
 
@@ -58,7 +57,7 @@ public class Review {
     }
 
     private boolean areAllRemarksResolved() {
-        return suggestedChanges.stream().allMatch(SuggestedChanges::isResolved);
+        return suggestedChanges.getSuggestedChanges().stream().allMatch(SuggestedChange::isResolved);
     }
 
     private void checkInvariants() {

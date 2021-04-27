@@ -82,7 +82,5 @@ Not decided:
 * Monitoring, containers orchestration, deployments strategy (in place, canary, blue green, ab, rollling) do we need service mesh ?
 * And many, many more...
 
-I know too less context / architecture drivers to take decision adressing any of above concerns.
-
 # TODO:
 * other things todo are marked with comments //todo in the code

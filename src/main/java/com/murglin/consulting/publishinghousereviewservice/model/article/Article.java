@@ -1,7 +1,7 @@
 package com.murglin.consulting.publishinghousereviewservice.model.article;
 
 import com.murglin.consulting.publishinghousereviewservice.model.review.Review;
-import com.murglin.consulting.publishinghousereviewservice.model.review.SuggestedChanges;
+import com.murglin.consulting.publishinghousereviewservice.model.review.SuggestedChange;
 import com.murglin.consulting.publishinghousereviewservice.model.user.User;
 import lombok.*;
 import org.apache.commons.lang3.ObjectUtils;
@@ -29,15 +29,15 @@ public class Article {
 
     private final User author;
 
-    public void suggestChanges(final SuggestedChanges suggestedChanges) {
-        if (author.getId().equals(suggestedChanges.getCopyWriterId())) {
+    public void suggestChanges(final SuggestedChange suggestedChange) {
+        if (author.getId().equals(suggestedChange.getCopyWriterId())) {
             throw new IllegalStateException("Author cannot suggest remarks to its own article"); //TODO question - can or not ?
         }
         if (status == ArticleStatus.PUBLISHED) {
             throw new IllegalStateException("Cannot suggest changes to already published article");
         }
         status = ArticleStatus.IN_REVIEW;
-        review.suggestChanges(suggestedChanges);
+        review.suggestChanges(suggestedChange);
         checkInvariants();
         //TODO generate event to publish here
     }

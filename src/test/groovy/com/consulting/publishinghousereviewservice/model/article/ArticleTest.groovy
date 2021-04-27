@@ -2,7 +2,7 @@ package com.consulting.publishinghousereviewservice.model.article
 
 import com.murglin.consulting.publishinghousereviewservice.model.article.*
 import com.murglin.consulting.publishinghousereviewservice.model.review.Review
-import com.murglin.consulting.publishinghousereviewservice.model.review.SuggestedChanges
+import com.murglin.consulting.publishinghousereviewservice.model.review.SuggestedChange
 import com.murglin.consulting.publishinghousereviewservice.model.user.User
 import com.murglin.consulting.publishinghousereviewservice.model.user.UserRole
 import spock.lang.Specification
@@ -19,7 +19,7 @@ class ArticleTest extends Specification {
         def article = Article.create(title, content, topic, review, author)
 
         when: "Author try to suggest remarks to its own article"
-        def suggestedChanges = SuggestedChanges.create(author.getId(), "some remarks")
+        def suggestedChanges = SuggestedChange.create(author.getId(), "some remarks")
         article.suggestChanges(suggestedChanges)
 
         then: "exception IllegalArgumentException should be thrown"
@@ -40,7 +40,7 @@ class ArticleTest extends Specification {
         article.setStatus(ArticleStatus.PUBLISHED)
 
         when: "Author try to suggest remarks to its own article"
-        def suggestedChanges = SuggestedChanges.create(UUID.randomUUID(), "some remarks")
+        def suggestedChanges = SuggestedChange.create(UUID.randomUUID(), "some remarks")
         article.suggestChanges(suggestedChanges)
 
         then: "exception IllegalArgumentException should be thrown"
@@ -62,7 +62,7 @@ class ArticleTest extends Specification {
         article.setStatus(ArticleStatus.DRAFT)
 
         when: "Author try to suggest remarks to its own article"
-        def suggestedChanges = SuggestedChanges.create(reviewerId, "some remarks")
+        def suggestedChanges = SuggestedChange.create(reviewerId, "some remarks")
         article.suggestChanges(suggestedChanges)
 
         then:

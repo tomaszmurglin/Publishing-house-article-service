@@ -1,34 +1,20 @@
 package com.murglin.consulting.publishinghousereviewservice.model.review;
 
-import lombok.*;
-import org.apache.commons.lang3.ObjectUtils;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import javax.annotation.concurrent.ThreadSafe;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-@EqualsAndHashCode
-@ToString
 @ThreadSafe
+@Getter
+@EqualsAndHashCode
 public final class SuggestedChanges {
 
-    @Getter
-    private final UUID copyWriterId;
+    private final Set<SuggestedChange> suggestedChanges = new HashSet<>();
 
-    private final String remarks;
-
-    @Getter
-    private final boolean resolved = false;
-
-    //TODO test it
-    public static SuggestedChanges create(final UUID copyWriterId, final String remarks) {
-        if (!ObjectUtils.allNotNull(copyWriterId, remarks)) {
-            throw new IllegalArgumentException("All arguments must be non-null");
-        }
-        if (remarks.isBlank()) {
-            throw new IllegalStateException("Suggested changes should have meaningful remarks");
-        }
-        //TODO generate event to publish here
-        return new SuggestedChanges(copyWriterId, remarks);
+    public boolean suggest(final SuggestedChange suggestedChange) {
+        return this.suggestedChanges.add(suggestedChange);
     }
 }
