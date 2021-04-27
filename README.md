@@ -58,7 +58,7 @@ its not stateless approach (scalability issue - client needs to reach same servi
 * Consequences: events published respecting to db transactions
 * Alternatives: different delivery guarantee policy
 
-6. How to represent id fields in db structures ?
+7. How to represent id fields in db structures ?
 * Context: Surogate/synthetic key vs business/natural key ? App or db generated ? If surogate then UUID vs Sequence ?
 * Decision: Natural keys are candidates to potential change for example (userId can be represented specific to given country / law jurisdiction that can change accoring to some political changes) which can cause db migration related problems. In production for perfromance constraints Ill choose sequence generated on the db level. For the sake of POC here and in-memory stub instead of db UUID is just enough choice.
 * Consequences: We have id proof to changes + performance.
@@ -77,7 +77,7 @@ Not decided:
 * System architecture (monolith, modular monolith, microservices, esb, ...) ?
 * App framework + what threading model reactive/reactor pattern vs parallel workers vs fibers ?
 * Db engine/engines choice
-* Cloud (IaaS vs PaaS ?) vs on prem vs multi vs hybrid + ci/cd + other infra e.g: ci/cd, message brokers, containers etc.
+* Cloud (IaaS vs PaaS ?) vs on prem vs multi vs hybrid + ci/cd + other infra e.g: message brokers, containers etc.
 * Data replication, fail over, clustering, resiliency etc.
 * Monitoring, containers orchestration, deployments strategy (in place, canary, blue green, ab, rollling) do we need service mesh ?
 * And many, many more...
