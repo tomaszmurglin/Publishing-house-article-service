@@ -1,8 +1,6 @@
 package com.murglin.consulting.publishinghousereviewservice.model.article;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.concurrent.ThreadSafe;
@@ -10,6 +8,8 @@ import javax.annotation.concurrent.ThreadSafe;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @ThreadSafe // value objects should be immutable
+@EqualsAndHashCode
+@ToString
 public final class Content {
 
     private final String content;

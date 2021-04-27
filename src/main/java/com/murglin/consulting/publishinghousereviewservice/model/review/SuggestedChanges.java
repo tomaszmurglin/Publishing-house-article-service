@@ -1,23 +1,23 @@
 package com.murglin.consulting.publishinghousereviewservice.model.review;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.apache.commons.lang3.ObjectUtils;
 
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.UUID;
 
-//TODO add some db constraints if theres no any performance limitation (constraints uses CPU), cause db is the last resort protection
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-@Data
-public class SuggestedChanges {
+@EqualsAndHashCode
+@ToString
+@ThreadSafe
+public final class SuggestedChanges {
 
-    private final UUID id = UUID.randomUUID();
-
+    @Getter
     private final UUID copyWriterId;
 
     private final String remarks;
 
+    @Getter
     private final boolean resolved = false;
 
     //TODO test it

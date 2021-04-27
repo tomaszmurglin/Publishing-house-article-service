@@ -3,33 +3,31 @@ package com.murglin.consulting.publishinghousereviewservice.model.article;
 import com.murglin.consulting.publishinghousereviewservice.model.review.Review;
 import com.murglin.consulting.publishinghousereviewservice.model.review.SuggestedChanges;
 import com.murglin.consulting.publishinghousereviewservice.model.user.User;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.UUID;
 
 //TODO add some db constraints if theres no any performance limitation (constraints uses CPU), cause db is the last resort protection
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-@Setter
+@EqualsAndHashCode
+@ToString
 public class Article {
 
+    @Getter
     private final UUID id = UUID.randomUUID();
 
     private ArticleStatus status;
 
-    private Title title;
+    private final Title title;
 
-    private Content content;
+    private final Content content;
 
-    private Topic topic;
+    private final Topic topic;
 
-    private Review review;
+    private final Review review;
 
-    private User author;
+    private final User author;
 
     public void suggestChanges(final SuggestedChanges suggestedChanges) {
         if (author.getId().equals(suggestedChanges.getCopyWriterId())) {
@@ -40,6 +38,7 @@ public class Article {
         }
         status = ArticleStatus.IN_REVIEW;
         review.suggestChanges(suggestedChanges);
+        checkInvariants();
         //TODO generate event to publish here
     }
 
@@ -52,6 +51,7 @@ public class Article {
         }
         status = ArticleStatus.PUBLISHED;
         review.complete();
+        checkInvariants();
         //TODO generate event to publish here
     }
 
@@ -61,5 +61,23 @@ public class Article {
             throw new IllegalArgumentException("All arguments must be non-null");
         }
         return new Article(ArticleStatus.DRAFT, title, content, topic, review, author);
+    }
+
+    private void checkInvariants() {
+        if (title == null) {
+            throw new IllegalStateException("Title must be non-null");
+        }
+        if (content == null) {
+            throw new IllegalStateException("Content must be non-null");
+        }
+        if (topic == null) {
+            throw new IllegalStateException("Topic must be non-null");
+        }
+        if (review == null) {
+            throw new IllegalStateException("Review must be non-null");
+        }
+        if (author == null) {
+            throw new IllegalStateException("Author must be non-null");
+        }
     }
 }

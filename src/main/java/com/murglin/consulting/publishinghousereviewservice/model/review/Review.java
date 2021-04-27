@@ -1,8 +1,9 @@
 package com.murglin.consulting.publishinghousereviewservice.model.review;
 
 import lombok.AccessLevel;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
@@ -11,7 +12,8 @@ import java.util.UUID;
 
 //TODO add some db constraints if theres no any performance limitation (constraints uses CPU), cause db is the last resort protection
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-@Data
+@EqualsAndHashCode
+@ToString
 public class Review {
 
     private final UUID id = UUID.randomUUID();
@@ -31,6 +33,7 @@ public class Review {
             throw new IllegalStateException("Reviewer not assigned to the review");
         }
         this.suggestedChanges.add(suggestedChanges);
+        checkInvariants();
     }
 
     //TODO test it
@@ -42,6 +45,7 @@ public class Review {
             throw new IllegalStateException("Cannot complete review with not resolved remarks");
         }
         status = ReviewStatus.COMPLETED;
+        checkInvariants();
         //TODO generate event to publish here
     }
 
@@ -55,5 +59,11 @@ public class Review {
 
     private boolean areAllRemarksResolved() {
         return suggestedChanges.stream().allMatch(SuggestedChanges::isResolved);
+    }
+
+    private void checkInvariants() {
+        if (CollectionUtils.isEmpty(reviewersIds)) {
+            throw new IllegalStateException("Review must have reviewers"); //TODO or reviewers can be assigned later on ?
+        }
     }
 }
